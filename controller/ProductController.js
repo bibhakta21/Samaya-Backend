@@ -6,38 +6,60 @@ exports.createProduct = async (req, res) => {
       shortName,
       fullName,
       price,
-      rating,
-      reviews,
+      discountPrice,
       description,
-      dialColor,
-      bandColor,
       type,
-      inStock
+      inStock,
     } = req.body;
 
-    if (!shortName || !fullName || !price || !description || !dialColor || !bandColor || !type) {
-      return res.status(400).json({ error: "All required fields must be filled." });
+    const dialColors = req.body.dialColor; // from form
+    const bandColors = req.body.bandColor;
+    const imageFiles = req.files.images;
+
+    // Validate required fields
+    if (
+      !shortName || !fullName || !price || !description || !type ||
+      !dialColors || !bandColors || !imageFiles
+    ) {
+      return res.status(400).json({ error: "Missing required fields." });
     }
 
-    const images = req.files.map(file => `/uploads/${file.filename}`);
+    // Normalize inputs
+    const dialColorArr = Array.isArray(dialColors) ? dialColors : [dialColors];
+    const bandColorArr = Array.isArray(bandColors) ? bandColors : [bandColors];
+    const images = Array.isArray(imageFiles) ? imageFiles : [imageFiles];
+
+    // Ensure counts match
+    if (
+      dialColorArr.length !== bandColorArr.length ||
+      dialColorArr.length !== images.length
+    ) {
+      return res.status(400).json({ error: "Mismatch in image combinations." });
+    }
+
+    // Map combinations
+    const imageCombinations = dialColorArr.map((dial, idx) => ({
+      dialColor: dial,
+      bandColor: bandColorArr[idx],
+      imageUrl: `/uploads/${images[idx].filename}`,
+    }));
 
     const product = new Product({
       shortName,
       fullName,
       price,
-      rating,
-      reviews,
+      discountPrice,
       description,
-      dialColor,
-      bandColor,
       type,
       inStock,
-      images
+      imageCombinations,
     });
 
     await product.save();
+
     res.status(201).json({ message: "Product created successfully", product });
   } catch (error) {
+    console.error("Create Product Error:", error);
     res.status(500).json({ error: error.message });
   }
 };

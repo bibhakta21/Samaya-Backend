@@ -2,7 +2,7 @@ const Bookmark = require("../model/Bookmark");
 const Product = require("../model/Product");
 
 exports.toggleBookmark = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id; // use decoded token id
   const productId = req.params.productId;
 
   try {
@@ -18,14 +18,14 @@ exports.toggleBookmark = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
-  } 
+  }
 };
 
 exports.getUserBookmarks = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id; // use decoded token id
   try {
     const bookmarks = await Bookmark.find({ user: userId }).populate("product");
-    const products = bookmarks.map(b => b.product);
+    const products = bookmarks.map((b) => b.product);
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: err.message });

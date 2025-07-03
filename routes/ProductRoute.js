@@ -22,9 +22,9 @@ router.post("/", authMiddleware, adminMiddleware, upload, createProduct);
 router.put("/:id", authMiddleware, adminMiddleware, upload, updateProduct);
 router.delete("/:id", authMiddleware, adminMiddleware, deleteProduct);
 
-
+// review route
 router.post("/:id/reviews", authMiddleware, addReview);
 router.put("/:id/reviews", authMiddleware, updateReview);
-
+router.delete("/:id/reviews/:reviewId", authMiddleware, deleteReview);
 
 module.exports = router;

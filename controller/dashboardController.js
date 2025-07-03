@@ -64,5 +64,16 @@ exports.getDashboardData = async (req, res) => {
         },
       },
     ]);
+
+      
+    const contactRequests = await ContactRequest.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id": 1 } },
+    ]);
 };
 

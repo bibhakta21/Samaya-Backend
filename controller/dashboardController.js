@@ -21,4 +21,24 @@ exports.getDashboardData = async (req, res) => {
     ]);
     const totalSalesRevenue = totalSalesAggregate[0]?.total || 0;
   }
+
+   
+    const productOrders = await Booking.aggregate([
+      { $group: { _id: "$product", count: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      { $unwind: "$product" },
+      {
+        $project: {
+          productName: "$product.shortName",
+          count: 1,
+        },
+      },
+    ]);
 };

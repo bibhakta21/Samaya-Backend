@@ -55,4 +55,14 @@ exports.getDashboardData = async (req, res) => {
       },
       { $sort: { "_id.year": 1, "_id.week": 1 } },
     ]);
+       
+    const orderStatus = await Booking.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
 };
+

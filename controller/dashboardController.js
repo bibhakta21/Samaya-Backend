@@ -41,4 +41,18 @@ exports.getDashboardData = async (req, res) => {
         },
       },
     ]);
+
+        
+    const weeklyOrders = await Booking.aggregate([
+      {
+        $group: {
+          _id: {
+            week: { $week: "$createdAt" },
+            year: { $year: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.week": 1 } },
+    ]);
 };

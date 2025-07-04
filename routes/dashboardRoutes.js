@@ -5,6 +5,6 @@ const { authMiddleware, adminMiddleware } = require("../middleware/authMiddlewar
 const router = express.Router();
 
 
-
+router.get("/", authMiddleware, adminMiddleware, getDashboardData);
 
 module.exports = router;

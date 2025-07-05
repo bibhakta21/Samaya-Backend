@@ -9,6 +9,8 @@ const BookingSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   addressOne: { type: String, default: null },
   country: { type: String, default: null },
+  
+  paymentType: { type: String, default: null },
   dialColor: { type: String, default: null },
   bandColor: { type: String, default: null },
   status: { type: String, default: "pending" },

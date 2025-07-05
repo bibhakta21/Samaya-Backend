@@ -5,6 +5,8 @@ const CustomerValidation=require("../validation/CustomerValidation")
 
 router.get("/",  findAll);
 router.post("/",CustomerValidation, save);
+router.get("/:id",findById)
+router.delete("/:id",deleteById)
 
 
 module.exports=router;

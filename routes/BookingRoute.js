@@ -6,6 +6,7 @@ const {
   getAllBookings,
   cancelBooking,
   approveBooking,
+  updateBooking,
   deleteBooking
 } = require("../controller/BookingController");
 
@@ -17,6 +18,7 @@ router.post("/", authMiddleware, createBooking);
 router.get("/my-bookings", authMiddleware, getUserBookings);
 router.get("/:id", authMiddleware, getBookingById);
 router.get("/", authMiddleware, adminMiddleware, getAllBookings);
+router.put("/:id", authMiddleware, updateBooking);
 router.put("/:id/cancel", authMiddleware, cancelBooking);
 router.put("/:id/approve", authMiddleware, adminMiddleware, approveBooking);
 router.delete("/:id", authMiddleware, adminMiddleware, deleteBooking);
